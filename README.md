@@ -1,6 +1,75 @@
-# React + TypeScript + Vite
+# Catálogo de Macetas
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación web para visualizar y filtrar productos del catálogo de macetas con paginación del servidor.
+
+## 🚀 Inicio Rápido
+
+```bash
+# Instalar dependencias
+pnpm install
+
+# Iniciar servidor de desarrollo
+pnpm dev
+
+# Build para producción
+pnpm build
+```
+
+## 📝 Scripts Disponibles
+
+```bash
+# Desarrollo
+pnpm dev              # Inicia el servidor de desarrollo
+
+# Build
+pnpm build            # Compila para producción
+pnpm preview          # Preview del build de producción
+
+# Linting
+pnpm lint             # Ejecuta ESLint
+```
+
+## 🔧 Configuración del Backend
+
+### API Backend
+
+La aplicación está conectada a:
+```
+https://alex-back-l4uhvp-a22dbf-185-250-36-170.traefik.me
+```
+
+### Proxy de Vite
+
+El proyecto usa un proxy que redirige `/api` al backend configurado.
+
+**Para cambiar la URL del backend:**
+1. Edita `VITE_API_BASE_URL` en `.env`
+2. Reinicia el servidor de Vite (Ctrl+C y `pnpm dev`)
+
+### Variables de Entorno
+
+```bash
+# URL del backend
+VITE_API_BASE_URL=https://alex-back-l4uhvp-a22dbf-185-250-36-170.traefik.me
+```
+
+## 📚 Tecnologías
+
+- **React 19** + **TypeScript**
+- **Vite 8** - Build tool
+- **TanStack Table v8** - Gestión de tabla
+- **TanStack Query v5** - Fetching y cache de datos
+- **Base UI** - Componentes primitivos accesibles
+- **React Router v7** - Routing y URL params
+
+## 📖 Documentación
+
+- [`BACKEND_SETUP.md`](./BACKEND_SETUP.md) - Configuración del backend y proxy
+- [Documentación original de Vite](#vite-template-info)
+
+---
+
+## Vite Template Info
 
 Currently, two official plugins are available:
 

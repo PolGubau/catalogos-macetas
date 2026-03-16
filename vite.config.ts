@@ -1,14 +1,21 @@
 import babel from "@rolldown/plugin-babel";
+import tailwindcss from "@tailwindcss/vite";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { defineConfig, loadEnv } from "vite";
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
 	const env = loadEnv(mode, process.cwd(), "");
-	const apiBaseUrl = env.VITE_API_BASE_URL || "http://localhost:8080";
+	const apiBaseUrl =
+		env.VITE_API_BASE_URL ||
+		"https://alex-back-l4uhvp-a22dbf-185-250-36-170.traefik.me";
 
 	return {
-		plugins: [react(), babel({ presets: [reactCompilerPreset()] })],
+		plugins: [
+			react(),
+			babel({ presets: [reactCompilerPreset()] }),
+			tailwindcss(),
+		],
 		server: {
 			proxy: {
 				"/api": {

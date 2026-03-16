@@ -49,9 +49,12 @@ export const TablePage = () => {
   // Show full loading only on initial load (no data yet)
   if (isLoading && !data) {
     return (
-      <div className="page-container">
-        <div className="loading-container">
-          <p>Cargando productos...</p>
+      <div className="container mx-auto max-w-7xl p-6">
+        <div className="flex items-center justify-center min-h-[400px] animate-in fade-in duration-500">
+          <div className="flex flex-col items-center gap-4">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+            <p className="text-base text-muted-foreground animate-pulse">Cargando productos...</p>
+          </div>
         </div>
       </div>
     );
@@ -59,9 +62,11 @@ export const TablePage = () => {
 
   if (isError && !data) {
     return (
-      <div className="page-container">
-        <div className="error-container">
-          <p>Error al cargar los productos: {error?.message}</p>
+      <div className="container mx-auto max-w-7xl p-6">
+        <div className="flex items-center justify-center min-h-[400px] animate-in fade-in zoom-in-95 duration-500">
+          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-6 animate-in shake">
+            <p className="text-base text-destructive font-medium">Error al cargar los productos: {error?.message}</p>
+          </div>
         </div>
       </div>
     );
@@ -72,7 +77,7 @@ export const TablePage = () => {
   }
 
   return (
-    <div className="page-container">
+    <div className="container mx-auto max-w-7xl p-6">
       <CatalogTable
         data={data.content}
         pagination={data.pagination}

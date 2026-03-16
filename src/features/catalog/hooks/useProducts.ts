@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import type { ProductFilters, ProductsResponse } from "../domains/catalog";
-import { getMockProductsResponse } from "../mocks/mockProducts";
 
 interface UseProductsParams {
 	filters: ProductFilters;
@@ -8,21 +7,10 @@ interface UseProductsParams {
 	size: number;
 }
 
-// Use environment variable to determine if we should use mock data
-const USE_MOCK_DATA = import.meta.env.VITE_USE_MOCK_DATA === "true";
-
 export const useProducts = ({ filters, page, size }: UseProductsParams) => {
 	return useQuery({
 		queryKey: ["products", filters, page, size],
 		queryFn: async (): Promise<ProductsResponse> => {
-			// Use mock data for development
-			if (USE_MOCK_DATA) {
-				// Simulate network delay
-				await new Promise((resolve) => setTimeout(resolve, 500));
-				return getMockProductsResponse(page, size, filters);
-			}
-
-			// Real API call
 			const params = new URLSearchParams();
 
 			// Add pagination params
