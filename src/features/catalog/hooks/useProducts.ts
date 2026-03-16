@@ -8,8 +8,8 @@ interface UseProductsParams {
 	size: number;
 }
 
-// Set to true to use mock data, false to use real API
-const USE_MOCK_DATA = true;
+// Use environment variable to determine if we should use mock data
+const USE_MOCK_DATA = import.meta.env.VITE_USE_MOCK_DATA === "true";
 
 export const useProducts = ({ filters, page, size }: UseProductsParams) => {
 	return useQuery({
