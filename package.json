@@ -1,13 +1,30 @@
 {
 	"name": "catalogos-macetas",
 	"private": true,
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"type": "module",
+	"description": "Aplicación web para visualizar, filtrar y gestionar el catálogo de macetas con paginación del servidor",
+	"author": "HDMI Doscientos",
+	"license": "MIT",
+	"keywords": [
+		"catalog",
+		"macetas",
+		"react",
+		"vite",
+		"typescript",
+		"tanstack-query",
+		"tailwindcss"
+	],
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc -b && vite build",
 		"lint": "eslint .",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"type-check": "tsc -b --noEmit"
+	},
+	"engines": {
+		"node": ">=18.0.0",
+		"pnpm": ">=8.0.0"
 	},
 	"dependencies": {
 		"@base-ui-components/react": "1.0.0-rc.0",

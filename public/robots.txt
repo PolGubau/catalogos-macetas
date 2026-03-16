@@ -1,0 +1,7 @@
+# Robots.txt for Catálogo de Macetas
+User-agent: *
+Allow: /
+
+# Sitemap (update with actual URL when deployed)
+# Sitemap: https://macetas.polgubau.com/sitemap.xml
+

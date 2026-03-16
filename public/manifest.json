@@ -1,0 +1,19 @@
+{
+	"name": "Catálogo de Macetas",
+	"short_name": "Macetas",
+	"description": "Aplicación web para visualizar, filtrar y gestionar el catálogo de macetas",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#ffffff",
+	"theme_color": "#7c3aed",
+	"orientation": "portrait-primary",
+	"icons": [
+		{
+			"src": "/favicon.svg",
+			"sizes": "any",
+			"type": "image/svg+xml",
+			"purpose": "any maskable"
+		}
+	]
+}
+
