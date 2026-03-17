@@ -1,10 +1,13 @@
 import { Router } from './app/router/router';
-import { ThemeProvider } from './hooks/useTheme';
+import { ThemeProvider } from './shared/hooks/useTheme';
 
 function App() {
   return (
     <ThemeProvider>
-      <Router />
+      <div className="root">
+
+        <Router />
+      </div>/
     </ThemeProvider>
   );
 }

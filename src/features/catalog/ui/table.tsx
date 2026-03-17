@@ -6,14 +6,16 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Download, FileDown, Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { ThemeToggle } from '../../../components/ThemeToggle';
-import { getApiUrl } from '../../../lib/api';
+import { ExportDrawer } from '../../../shared/ExportDrawer';
+import { SettingsDrawer } from '../../../shared/SettingsDrawer';
+import { getApiUrl } from '../../../shared/lib/api';
 import type { Pagination, Product, ProductFilters } from '../domains/catalog';
 import { useFilterOptions } from '../hooks/useFilterOptions';
 import { CatalogFilters } from './filters';
+import { ProductCard } from './product-card';
 
 // Helper function to download file from URL
 const downloadFile = (url: string, filename: string) => {
@@ -165,27 +167,62 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
       {
         accessorKey: 'referencia',
         header: 'Referencia',
-        cell: (info) => info.getValue(),
+        cell: (info) => {
+          const value = info.getValue() as string;
+          return (
+            <div className="max-w-30 truncate" title={value}>
+              {value}
+            </div>
+          );
+        },
       },
       {
         accessorKey: 'nombre',
         header: 'Nombre',
-        cell: (info) => info.getValue(),
+        cell: (info) => {
+          const value = info.getValue() as string;
+          return (
+            <div className="max-w-50 line-clamp-1" title={value}>
+              {value}
+            </div>
+          );
+        },
       },
       {
         accessorKey: 'descripcion',
         header: 'Descripción',
-        cell: (info) => info.getValue() || '-',
+        cell: (info) => {
+          const value = (info.getValue() as string) || '-';
+          return (
+            <div className="max-w-62.5 line-clamp-1" title={value !== '-' ? value : undefined}>
+              {value}
+            </div>
+          );
+        },
       },
       {
         accessorKey: 'categoria',
         header: 'Categoría',
-        cell: (info) => info.getValue(),
+        cell: (info) => {
+          const value = info.getValue() as string;
+          return (
+            <div className="max-w-37.5 truncate" title={value}>
+              {value}
+            </div>
+          );
+        },
       },
       {
         accessorKey: 'empresa',
         header: 'Empresa',
-        cell: (info) => info.getValue(),
+        cell: (info) => {
+          const value = info.getValue() as string;
+          return (
+            <div className="max-w-37.5 truncate" title={value}>
+              {value}
+            </div>
+          );
+        },
       },
       {
         accessorKey: 'precio',
@@ -196,44 +233,95 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
             currency: 'EUR',
           }).format(Number(info.getValue()));
           return (
-            <span className="text-sm text-foreground font-semibold">{formattedPrice}</span>
-          )
+            <span className="text-sm text-foreground font-semibold whitespace-nowrap" title={formattedPrice}>
+              {formattedPrice}
+            </span>
+          );
         },
       },
       {
         accessorKey: 'color',
         header: 'Color',
-        cell: (info) => info.getValue() || '-',
+        cell: (info) => {
+          const value = (info.getValue() as string) || '-';
+          return (
+            <div className="max-w-[120px] truncate" title={value !== '-' ? value : undefined}>
+              {value}
+            </div>
+          );
+        },
       },
       {
         accessorKey: 'ancho',
         header: 'Ancho',
-        cell: (info) => (info.getValue() ? `${(Number(info.getValue()) / 10).toFixed(1)} cm` : '-'),
+        cell: (info) => {
+          const value = info.getValue() ? `${(Number(info.getValue()) / 10).toFixed(1)} cm` : '-';
+          return (
+            <span className="whitespace-nowrap" title={value !== '-' ? value : undefined}>
+              {value}
+            </span>
+          );
+        },
       },
       {
         accessorKey: 'largo',
         header: 'Largo',
-        cell: (info) => (info.getValue() ? `${(Number(info.getValue()) / 10).toFixed(1)} cm` : '-'),
+        cell: (info) => {
+          const value = info.getValue() ? `${(Number(info.getValue()) / 10).toFixed(1)} cm` : '-';
+          return (
+            <span className="whitespace-nowrap" title={value !== '-' ? value : undefined}>
+              {value}
+            </span>
+          );
+        },
       },
       {
         accessorKey: 'alto',
         header: 'Alto',
-        cell: (info) => (info.getValue() ? `${(Number(info.getValue()) / 10).toFixed(1)} cm` : '-'),
+        cell: (info) => {
+          const value = info.getValue() ? `${(Number(info.getValue()) / 10).toFixed(1)} cm` : '-';
+          return (
+            <span className="whitespace-nowrap" title={value !== '-' ? value : undefined}>
+              {value}
+            </span>
+          );
+        },
       },
       {
         accessorKey: 'peso',
         header: 'Peso',
-        cell: (info) => info.getValue() || '-',
+        cell: (info) => {
+          const value = (info.getValue() as string) || '-';
+          return (
+            <span className="whitespace-nowrap" title={value !== '-' ? value : undefined}>
+              {value}
+            </span>
+          );
+        },
       },
       {
         accessorKey: 'volumen',
         header: 'Volumen',
-        cell: (info) => info.getValue() || '-',
+        cell: (info) => {
+          const value = (info.getValue() as string) || '-';
+          return (
+            <span className="whitespace-nowrap" title={value !== '-' ? value : undefined}>
+              {value}
+            </span>
+          );
+        },
       },
       {
         accessorKey: 'origenPdf',
         header: 'Fuente',
-        cell: (info) => info.getValue() || '-',
+        cell: (info) => {
+          const value = (info.getValue() as string) || '-';
+          return (
+            <div className="max-w-[150px] truncate" title={value !== '-' ? value : undefined}>
+              {value}
+            </div>
+          );
+        },
       },
     ],
     []
@@ -260,59 +348,34 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="space-y-1">
             <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-              Catálogo de Macetas
+              Catálogo Automático
             </h1>
             <p className="text-base text-muted-foreground font-medium">
               Explora nuestra colección completa
             </p>
           </div>
           <div className="flex items-center gap-3">
-            {/* Export Buttons */}
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handleExportFiltered}
-                disabled={isExporting || data.length === 0}
-                className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-lg border-2 border-primary/20 bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/20"
-                aria-label="Exportar datos filtrados a CSV"
-              >
-                <FileDown className="w-4 h-4" />
-                {isExporting ? 'Exportando...' : 'Exportar filtrados'}
-              </button>
+            {/* Export Drawer */}
+            <ExportDrawer
+              onExportFiltered={handleExportFiltered}
+              onExportAll={handleExportAll}
+              hasFilters={Object.values(filters).filter(Boolean).length > 0}
+              isExporting={isExporting}
+            />
 
-              <button
-                type="button"
-                onClick={handleExportAll}
-                disabled={isExporting}
-                className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg shadow-primary/25 focus:outline-none focus:ring-4 focus:ring-primary/20"
-                aria-label="Exportar todos los datos a CSV"
-              >
-                <Download className="w-4 h-4" />
-                {isExporting ? 'Exportando...' : 'Exportar todo'}
-              </button>
-            </div>
-
-            {/* Product Counter */}
-            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 border border-primary/20">
-              <div className="flex flex-col items-end">
-                <span className="text-2xl font-bold text-primary tabular-nums">
-                  {pagination.totalElements}
-                </span>
-                <span className="text-xs text-muted-foreground uppercase tracking-wider">
-                  Productos
-                </span>
-              </div>
-            </div>
-
-            {/* Theme Toggle */}
-            <ThemeToggle />
+            {/* Settings Drawer */}
+            <SettingsDrawer />
           </div>
         </div>
         {pagination.numberOfElements > 0 && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-muted/50 border border-border">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               Mostrando {pagination.numberOfElements} resultados
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
+              <span className="font-semibold text-primary tabular-nums">{pagination.totalElements}</span>
+              <span className="text-muted-foreground">productos totales</span>
             </span>
             {pagination.totalPages > 1 && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-muted/50 border border-border">
@@ -335,12 +398,45 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
         />
       </div>
 
-      {/* Table */}
-      <div className="overflow-hidden rounded-lg border border-border bg-card shadow-sm animate-in slide-in-from-bottom-8 duration-700 delay-200">
+      {/* Mobile Cards View */}
+      <div className="lg:hidden space-y-3 animate-in slide-in-from-bottom-8 duration-700 delay-200">
+        {/* Loading indicator */}
+        {isLoading && (
+          <div className="h-1 w-full bg-muted overflow-hidden rounded-full">
+            <div className="h-full bg-primary animate-[shimmer_1s_ease-in-out_infinite] bg-linear-to-r from-transparent via-primary to-transparent bg-size-[200%_100%]"
+              style={{ animation: 'shimmer 1s ease-in-out infinite' }} />
+          </div>
+        )}
+
+        <div className={`space-y-3 transition-opacity duration-150 ${isLoading ? 'opacity-60' : 'opacity-100'}`}>
+          {data.map((product, index) => (
+            <ProductCard key={product.referencia} product={product} index={index} />
+          ))}
+        </div>
+
+        {pagination.empty && (
+          <div className="py-16 text-center animate-in fade-in zoom-in-95 duration-500">
+            <div className="flex flex-col items-center gap-4 max-w-md mx-auto">
+              <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center">
+                <Search className="w-8 h-8 text-muted-foreground" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold text-foreground">No se encontraron productos</h3>
+                <p className="text-sm text-muted-foreground">
+                  Intenta ajustar los filtros o buscar con otros términos
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Desktop Table View */}
+      <div className="hidden lg:block overflow-hidden rounded-lg border border-border bg-card shadow-sm animate-in slide-in-from-bottom-8 duration-700 delay-200">
         {/* Loading indicator - subtle progress bar at top */}
         {isLoading && (
           <div className="h-1 w-full bg-muted overflow-hidden">
-            <div className="h-full bg-primary animate-[shimmer_1s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-primary to-transparent bg-[length:200%_100%]"
+            <div className="h-full bg-primary animate-[shimmer_1s_ease-in-out_infinite] bg-linear-to-r from-transparent via-primary to-transparent bg-size-[200%_100%]"
               style={{ animation: 'shimmer 1s ease-in-out infinite' }} />
           </div>
         )}
@@ -436,7 +532,7 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
 
       {/* Pagination */}
       <nav
-        className="flex items-center justify-between gap-4 flex-wrap border-t border-border bg-gradient-to-r from-muted/30 to-muted/10 px-6 py-5 rounded-b-lg animate-in slide-in-from-bottom-4 duration-500 delay-300"
+        className="flex items-center justify-between gap-4 flex-wrap border-t border-border bg-linear-to-r from-muted/30 to-muted/10 px-6 py-5 rounded-b-lg animate-in slide-in-from-bottom-4 duration-500 delay-300"
         aria-label="Paginación de tabla"
       >
         <div className="flex items-center gap-2">

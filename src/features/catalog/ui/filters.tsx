@@ -1,9 +1,10 @@
-import { Field } from '@base-ui-components/react/field';
-import { NumberField } from '@base-ui-components/react/number-field';
-import { ChevronDown, ChevronUp, RotateCcw } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { useDebounce } from '../../../hooks/useDebounce';
+import { useState } from 'react';
+import { useRangeValidation } from '../../../shared/hooks/useRangeValidation';
 import type { ProductFilters } from '../domains/catalog';
+import { useFilterState } from '../hooks/useFilterState';
+import { AdvancedFilters } from './components/advanced-filters';
+import { FilterFooter } from './components/filter-footer';
+import { PrimaryFilters } from './components/primary-filters';
 
 interface FiltersProps {
   filters: ProductFilters;
@@ -14,6 +15,14 @@ interface FiltersProps {
   origenesPdf: string[];
 }
 
+/**
+ * CatalogFilters Component
+ *
+ * Main filter component that orchestrates all filter sub-components.
+ * Follows Single Responsibility Principle - only handles filter orchestration.
+ * Follows Open/Closed Principle - extensible through composition.
+ * Follows Dependency Inversion Principle - depends on abstractions (hooks, components).
+ */
 export const CatalogFilters = ({
   filters,
   onFiltersChange,
@@ -22,129 +31,45 @@ export const CatalogFilters = ({
   colores,
   origenesPdf,
 }: FiltersProps) => {
-  // Local state for search input to enable debouncing
-  const [searchInput, setSearchInput] = useState(filters.search || '');
-  const debouncedSearch = useDebounce(searchInput, 500);
-
   // State for showing/hiding advanced filters
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
-  // Sync local state with external filter changes (e.g., when clearing filters)
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    if (filters.search !== searchInput && filters.search !== debouncedSearch) {
-      setSearchInput(filters.search || '');
+  // Custom hooks for business logic
+  const { searchInput, setSearchInput, debouncedSearch } = useFilterState(
+    filters,
+    onFiltersChange
+  );
+  const { validateMinValue, validateMaxValue } = useRangeValidation();
+
+  // Handler for simple filter changes (select fields)
+  const handleFilterChange = (key: keyof ProductFilters, value: string) => {
+    onFiltersChange({ ...filters, [key]: value || undefined });
+  };
+
+  // Handler for range filter changes with validation
+  const handleRangeChange = (
+    minKey: keyof ProductFilters,
+    maxKey: keyof ProductFilters,
+    minValue: number | null,
+    maxValue: number | null
+  ) => {
+    let newFilters = { ...filters };
+
+    // Determine which value changed and validate accordingly
+    if (minValue !== filters[minKey]) {
+      const validated = validateMinValue(
+        minValue,
+        filters[maxKey] as number | undefined
+      );
+      newFilters = { ...newFilters, [minKey]: validated.min, [maxKey]: validated.max };
+    } else if (maxValue !== filters[maxKey]) {
+      const validated = validateMaxValue(
+        maxValue,
+        filters[minKey] as number | undefined
+      );
+      newFilters = { ...newFilters, [minKey]: validated.min, [maxKey]: validated.max };
     }
-  }, [filters.search]);
 
-  // Update filters when debounced search changes
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    if (debouncedSearch !== filters.search) {
-      onFiltersChange({ ...filters, search: debouncedSearch || undefined });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearch]);
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value);
-  };
-
-  const handleMinPriceChange = (value: number | null) => {
-    const newFilters = { ...filters, minPrice: value ?? undefined };
-    // If min is set and max is less than min, adjust max to equal min
-    if (value !== null && (filters.maxPrice === undefined || filters.maxPrice < value)) {
-      newFilters.maxPrice = value;
-    }
-    onFiltersChange(newFilters);
-  };
-
-  const handleMaxPriceChange = (value: number | null) => {
-    const newFilters = { ...filters, maxPrice: value ?? undefined };
-    // If max is set and min is greater than max, adjust min to equal max
-    if (value !== null && filters.minPrice !== undefined && filters.minPrice > value) {
-      newFilters.minPrice = value;
-    }
-    onFiltersChange(newFilters);
-  };
-
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onFiltersChange({ ...filters, categoria: e.target.value || undefined });
-  };
-
-  const handleEmpresaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onFiltersChange({ ...filters, empresa: e.target.value || undefined });
-  };
-
-  const handleColorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onFiltersChange({ ...filters, color: e.target.value || undefined });
-  };
-
-  const handleOrigenPdfChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onFiltersChange({ ...filters, origenPdf: e.target.value || undefined });
-  };
-
-  const handleMinAnchoChange = (value: number | null) => {
-    const newFilters = { ...filters, minAncho: value ?? undefined };
-    if (value !== null && (filters.maxAncho === undefined || filters.maxAncho < value)) {
-      newFilters.maxAncho = value;
-    }
-    onFiltersChange(newFilters);
-  };
-
-  const handleMaxAnchoChange = (value: number | null) => {
-    const newFilters = { ...filters, maxAncho: value ?? undefined };
-    if (value !== null && filters.minAncho !== undefined && filters.minAncho > value) {
-      newFilters.minAncho = value;
-    }
-    onFiltersChange(newFilters);
-  };
-
-  const handleMinLargoChange = (value: number | null) => {
-    const newFilters = { ...filters, minLargo: value ?? undefined };
-    if (value !== null && (filters.maxLargo === undefined || filters.maxLargo < value)) {
-      newFilters.maxLargo = value;
-    }
-    onFiltersChange(newFilters);
-  };
-
-  const handleMaxLargoChange = (value: number | null) => {
-    const newFilters = { ...filters, maxLargo: value ?? undefined };
-    if (value !== null && filters.minLargo !== undefined && filters.minLargo > value) {
-      newFilters.minLargo = value;
-    }
-    onFiltersChange(newFilters);
-  };
-
-  const handleMinPesoChange = (value: number | null) => {
-    const newFilters = { ...filters, minPeso: value ?? undefined };
-    if (value !== null && (filters.maxPeso === undefined || filters.maxPeso < value)) {
-      newFilters.maxPeso = value;
-    }
-    onFiltersChange(newFilters);
-  };
-
-  const handleMaxPesoChange = (value: number | null) => {
-    const newFilters = { ...filters, maxPeso: value ?? undefined };
-    if (value !== null && filters.minPeso !== undefined && filters.minPeso > value) {
-      newFilters.minPeso = value;
-    }
-    onFiltersChange(newFilters);
-  };
-
-  const handleMinVolumenChange = (value: number | null) => {
-    const newFilters = { ...filters, minVolumen: value ?? undefined };
-    if (value !== null && (filters.maxVolumen === undefined || filters.maxVolumen < value)) {
-      newFilters.maxVolumen = value;
-    }
-    onFiltersChange(newFilters);
-  };
-
-  const handleMaxVolumenChange = (value: number | null) => {
-    const newFilters = { ...filters, maxVolumen: value ?? undefined };
-    if (value !== null && filters.minVolumen !== undefined && filters.minVolumen > value) {
-      newFilters.minVolumen = value;
-    }
     onFiltersChange(newFilters);
   };
 
@@ -152,325 +77,38 @@ export const CatalogFilters = ({
     onFiltersChange({});
   };
 
+  const handleToggleAdvancedFilters = () => {
+    setShowAdvancedFilters(!showAdvancedFilters);
+  };
+
   return (
     <div className="rounded-xl border border-border bg-linear-to-br from-card to-card/50 p-6 shadow-lg backdrop-blur-sm">
-      {/* Filtros Primarios - Layout Horizontal */}
-      <header className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-4">
-        {/* Search Filter - Ocupa 2 columnas */}
-        <Field.Root className="flex flex-col gap-1.5 md:col-span-3">
-          <Field.Label className="text-xs font-semibold text-foreground">
-            Búsqueda
-          </Field.Label>
-          <div className="relative">
-            <Field.Control
-              type="text"
-              placeholder="Buscar..."
-              value={searchInput}
-              onChange={handleSearchChange}
-              className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200"
-            />
-            {searchInput !== debouncedSearch && (
-              <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-              </div>
-            )}
-          </div>
-        </Field.Root>
+      {/* Primary Filters */}
+      <PrimaryFilters
+        searchInput={searchInput}
+        onSearchChange={setSearchInput}
+        isSearchLoading={searchInput !== debouncedSearch}
+        filters={filters}
+        onFilterChange={handleFilterChange}
+        categories={categories}
+        empresas={empresas}
+        showAdvancedFilters={showAdvancedFilters}
+        onToggleAdvancedFilters={handleToggleAdvancedFilters}
+      />
 
-        {/* Category Filter */}
-        <Field.Root className="flex flex-col gap-1.5">
-          <Field.Label className="text-xs font-semibold text-foreground">
-            Categoría
-          </Field.Label>
-          <select
-            value={filters.categoria || ''}
-            onChange={handleCategoryChange}
-            className="px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground cursor-pointer focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 appearance-none pr-8"
-          >
-            <option value="">Todas</option>
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        </Field.Root>
-
-        {/* Empresa Filter */}
-        <Field.Root className="flex flex-col gap-1.5">
-          <Field.Label className="text-xs font-semibold text-foreground">
-            Empresa
-          </Field.Label>
-          <select
-            value={filters.empresa || ''}
-            onChange={handleEmpresaChange}
-            className="px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground cursor-pointer focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 appearance-none pr-8"
-          >
-            <option value="">Todas</option>
-            {empresas.map((emp) => (
-              <option key={emp} value={emp}>
-                {emp}
-              </option>
-            ))}
-          </select>
-        </Field.Root>
-
-        {/* Botón para mostrar filtros avanzados */}
-        <div className="flex items-end">
-          <button
-            type="button"
-            onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-            className="w-full px-3 py-2 text-sm font-semibold rounded-lg border-2 border-primary/20 bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-200 flex items-center justify-center gap-2"
-          >
-            {showAdvancedFilters ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            {showAdvancedFilters ? 'Menos filtros' : 'Más filtros'}
-          </button>         </div>
-
-      </header>
-
-      {/* Filtros Avanzados - Colapsables */}
+      {/* Advanced Filters - Collapsible */}
       {showAdvancedFilters && (
-        <div className="space-y-4 pt-4 border-t border-border animate-in fade-in slide-in-from-top-4 duration-300">
-          {/* Fila 1: Precio, Color, Origen PDF */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Field.Root className="flex flex-col gap-1.5">
-              <Field.Label className="text-xs font-semibold text-foreground">
-                Precio mín (€)
-              </Field.Label>
-              <NumberField.Root
-                value={filters.minPrice ?? null}
-                onValueChange={handleMinPriceChange}
-                min={0}
-                step={0.01}
-              >
-                <NumberField.Input
-                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
-                  placeholder="0.00"
-                />
-              </NumberField.Root>
-            </Field.Root>
-
-            <Field.Root className="flex flex-col gap-1.5">
-              <Field.Label className="text-xs font-semibold text-foreground">
-                Precio máx (€)
-              </Field.Label>
-              <NumberField.Root
-                value={filters.maxPrice ?? null}
-                onValueChange={handleMaxPriceChange}
-                min={0}
-                step={0.01}
-              >
-                <NumberField.Input
-                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
-                  placeholder="0.00"
-                />
-              </NumberField.Root>
-            </Field.Root>
-
-            {/* Color */}
-            <Field.Root className="flex flex-col gap-1.5">
-              <Field.Label className="text-xs font-semibold text-foreground">
-                Color
-              </Field.Label>
-              <select
-                value={filters.color || ''}
-                onChange={handleColorChange}
-                className="px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground cursor-pointer focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em] bg-[right_0.5rem_center] bg-no-repeat pr-8"
-              >
-                <option value="">Todos</option>
-                {colores.map((color) => (
-                  <option key={color} value={color}>
-                    {color}
-                  </option>
-                ))}
-              </select>
-            </Field.Root>
-
-            {/* Origen PDF */}
-            <Field.Root className="flex flex-col gap-1.5">
-              <Field.Label className="text-xs font-semibold text-foreground">
-                Origen PDF
-              </Field.Label>
-              <select
-                value={filters.origenPdf || ''}
-                onChange={handleOrigenPdfChange}
-                className="px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground cursor-pointer focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em] bg-[right_0.5rem_center] bg-no-repeat pr-8"
-              >
-                <option value="">Todos</option>
-                {origenesPdf.map((origen) => (
-                  <option key={origen} value={origen}>
-                    {origen}
-                  </option>
-                ))}
-              </select>
-            </Field.Root>
-          </div>
-
-          {/* Fila 2: Dimensiones (Ancho, Largo, Peso, Volumen) */}
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-            {/* Min Ancho */}
-            <Field.Root className="flex flex-col gap-1.5">
-              <Field.Label className="text-xs font-semibold text-foreground">
-                Ancho mín (cm)
-              </Field.Label>
-              <NumberField.Root
-                value={filters.minAncho ?? null}
-                onValueChange={handleMinAnchoChange}
-                min={0}
-                step={0.1}
-              >
-                <NumberField.Input
-                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
-                  placeholder="0.0"
-                />
-              </NumberField.Root>
-            </Field.Root>
-
-            {/* Max Ancho */}
-            <Field.Root className="flex flex-col gap-1.5">
-              <Field.Label className="text-xs font-semibold text-foreground">
-                Ancho máx (cm)
-              </Field.Label>
-              <NumberField.Root
-                value={filters.maxAncho ?? null}
-                onValueChange={handleMaxAnchoChange}
-                min={0}
-                step={0.1}
-              >
-                <NumberField.Input
-                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
-                  placeholder="0.0"
-                />
-              </NumberField.Root>
-            </Field.Root>
-
-            {/* Min Largo */}
-            <Field.Root className="flex flex-col gap-1.5">
-              <Field.Label className="text-xs font-semibold text-foreground">
-                Largo mín (cm)
-              </Field.Label>
-              <NumberField.Root
-                value={filters.minLargo ?? null}
-                onValueChange={handleMinLargoChange}
-                min={0}
-                step={0.1}
-              >
-                <NumberField.Input
-                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
-                  placeholder="0.0"
-                />
-              </NumberField.Root>
-            </Field.Root>
-
-            {/* Max Largo */}
-            <Field.Root className="flex flex-col gap-1.5">
-              <Field.Label className="text-xs font-semibold text-foreground">
-                Largo máx (cm)
-              </Field.Label>
-              <NumberField.Root
-                value={filters.maxLargo ?? null}
-                onValueChange={handleMaxLargoChange}
-                min={0}
-                step={0.1}
-              >
-                <NumberField.Input
-                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
-                  placeholder="0.0"
-                />
-              </NumberField.Root>
-            </Field.Root>
-
-            {/* Min Peso */}
-            <Field.Root className="flex flex-col gap-1.5">
-              <Field.Label className="text-xs font-semibold text-foreground">
-                Peso mín (kg)
-              </Field.Label>
-              <NumberField.Root
-                value={filters.minPeso ?? null}
-                onValueChange={handleMinPesoChange}
-                min={0}
-                step={0.01}
-              >
-                <NumberField.Input
-                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
-                  placeholder="0.00"
-                />
-              </NumberField.Root>
-            </Field.Root>
-
-            {/* Max Peso */}
-            <Field.Root className="flex flex-col gap-1.5">
-              <Field.Label className="text-xs font-semibold text-foreground">
-                Peso máx (kg)
-              </Field.Label>
-              <NumberField.Root
-                value={filters.maxPeso ?? null}
-                onValueChange={handleMaxPesoChange}
-                min={0}
-                step={0.01}
-              >
-                <NumberField.Input
-                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
-                  placeholder="0.00"
-                />
-              </NumberField.Root>
-            </Field.Root>
-
-            {/* Min Volumen */}
-            <Field.Root className="flex flex-col gap-1.5">
-              <Field.Label className="text-xs font-semibold text-foreground">
-                Volumen mín (L)
-              </Field.Label>
-              <NumberField.Root
-                value={filters.minVolumen ?? null}
-                onValueChange={handleMinVolumenChange}
-                min={0}
-                step={0.1}
-              >
-                <NumberField.Input
-                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
-                  placeholder="0.0"
-                />
-              </NumberField.Root>
-            </Field.Root>
-
-            {/* Max Volumen */}
-            <Field.Root className="flex flex-col gap-1.5">
-              <Field.Label className="text-xs font-semibold text-foreground">
-                Volumen máx (L)
-              </Field.Label>
-              <NumberField.Root
-                value={filters.maxVolumen ?? null}
-                onValueChange={handleMaxVolumenChange}
-                min={0}
-                step={0.1}
-              >
-                <NumberField.Input
-                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
-                  placeholder="0.0"
-                />
-              </NumberField.Root>
-            </Field.Root>
-          </div>
-
-        </div>
+        <AdvancedFilters
+          filters={filters}
+          onRangeChange={handleRangeChange}
+          onFilterChange={handleFilterChange}
+          colores={colores}
+          origenesPdf={origenesPdf}
+        />
       )}
 
-      <footer className="flex items-center justify-between pt-3 border-t border-border">
-        <p className="text-xs text-muted-foreground">
-          {Object.values(filters).filter(Boolean).length > 0
-            ? `${Object.values(filters).filter(Boolean).length} filtro(s) activo(s)`
-            : 'Sin filtros aplicados'}
-        </p>
-        <button
-          type="button"
-          onClick={handleClearFilters}
-          className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-105 active:scale-95 shadow-lg shadow-primary/25 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200"
-        >
-          <RotateCcw className="w-3 h-3" />
-          Limpiar
-        </button>
-      </footer>
+      {/* Footer */}
+      <FilterFooter filters={filters} onClearFilters={handleClearFilters} />
     </div>
   );
 };

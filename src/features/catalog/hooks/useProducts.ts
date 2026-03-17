@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getApiUrl } from "../../../lib/api";
+import { getApiUrl } from "../../../shared/lib/api";
 import type { ProductFilters, ProductsResponse } from "../domains/catalog";
 
 interface UseProductsParams {

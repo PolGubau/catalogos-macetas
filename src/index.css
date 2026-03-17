@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-
-@variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
 	--color-background: oklch(100% 0 0);
@@ -36,35 +35,33 @@
 }
 
 .dark {
-	@theme {
-		--color-background: oklch(13.14% 0.008 285.82);
-		--color-foreground: oklch(98.04% 0.002 285.82);
+	--color-background: oklch(13.14% 0.008 285.82);
+	--color-foreground: oklch(98.04% 0.002 285.82);
 
-		--color-card: oklch(13.14% 0.008 285.82);
-		--color-card-foreground: oklch(98.04% 0.002 285.82);
+	--color-card: oklch(13.14% 0.008 285.82);
+	--color-card-foreground: oklch(98.04% 0.002 285.82);
 
-		--color-popover: oklch(13.14% 0.008 285.82);
-		--color-popover-foreground: oklch(98.04% 0.002 285.82);
+	--color-popover: oklch(13.14% 0.008 285.82);
+	--color-popover-foreground: oklch(98.04% 0.002 285.82);
 
-		--color-primary: oklch(70.35% 0.196 305.48);
-		--color-primary-foreground: oklch(9.84% 0.002 285.82);
+	--color-primary: oklch(70.35% 0.196 305.48);
+	--color-primary-foreground: oklch(9.84% 0.002 285.82);
 
-		--color-secondary: oklch(20.39% 0.013 285.82);
-		--color-secondary-foreground: oklch(98.04% 0.002 285.82);
+	--color-secondary: oklch(20.39% 0.013 285.82);
+	--color-secondary-foreground: oklch(98.04% 0.002 285.82);
 
-		--color-muted: oklch(20.39% 0.013 285.82);
-		--color-muted-foreground: oklch(64.9% 0.011 285.82);
+	--color-muted: oklch(20.39% 0.013 285.82);
+	--color-muted-foreground: oklch(64.9% 0.011 285.82);
 
-		--color-accent: oklch(20.39% 0.013 285.82);
-		--color-accent-foreground: oklch(98.04% 0.002 285.82);
+	--color-accent: oklch(20.39% 0.013 285.82);
+	--color-accent-foreground: oklch(98.04% 0.002 285.82);
 
-		--color-destructive: oklch(57.68% 0.227 29.23);
-		--color-destructive-foreground: oklch(98.04% 0.002 285.82);
+	--color-destructive: oklch(57.68% 0.227 29.23);
+	--color-destructive-foreground: oklch(98.04% 0.002 285.82);
 
-		--color-border: oklch(20.39% 0.013 285.82);
-		--color-input: oklch(20.39% 0.013 285.82);
-		--color-ring: oklch(70.35% 0.196 305.48);
-	}
+	--color-border: oklch(20.39% 0.013 285.82);
+	--color-input: oklch(20.39% 0.013 285.82);
+	--color-ring: oklch(70.35% 0.196 305.48);
 }
 
 * {
@@ -72,7 +69,7 @@
 }
 
 body {
-	@apply bg-background text-foreground;
+	@apply bg-background text-foreground relative;
 	font-feature-settings: "rlig" 1, "calt" 1;
 }
 
@@ -83,4 +80,7 @@ body {
 	100% {
 		background-position: 200% 0;
 	}
+}
+.root {
+	isolation: isolate;
 }
