@@ -21,6 +21,16 @@ export interface ProductFilters {
 	maxPrice?: number;
 	categoria?: string;
 	empresa?: string;
+	color?: string;
+	origenPdf?: string;
+	minAncho?: number;
+	maxAncho?: number;
+	minLargo?: number;
+	maxLargo?: number;
+	minPeso?: number;
+	maxPeso?: number;
+	minVolumen?: number;
+	maxVolumen?: number;
 }
 
 export interface Pagination {

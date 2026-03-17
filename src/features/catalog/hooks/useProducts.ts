@@ -25,6 +25,24 @@ export const useProducts = ({ filters, page, size }: UseProductsParams) => {
 				params.set("maxPrice", String(filters.maxPrice));
 			if (filters.categoria) params.set("categoria", filters.categoria);
 			if (filters.empresa) params.set("empresa", filters.empresa);
+			if (filters.color) params.set("color", filters.color);
+			if (filters.origenPdf) params.set("origenPdf", filters.origenPdf);
+			if (filters.minAncho !== undefined)
+				params.set("minAncho", String(filters.minAncho));
+			if (filters.maxAncho !== undefined)
+				params.set("maxAncho", String(filters.maxAncho));
+			if (filters.minLargo !== undefined)
+				params.set("minLargo", String(filters.minLargo));
+			if (filters.maxLargo !== undefined)
+				params.set("maxLargo", String(filters.maxLargo));
+			if (filters.minPeso !== undefined)
+				params.set("minPeso", String(filters.minPeso));
+			if (filters.maxPeso !== undefined)
+				params.set("maxPeso", String(filters.maxPeso));
+			if (filters.minVolumen !== undefined)
+				params.set("minVolumen", String(filters.minVolumen));
+			if (filters.maxVolumen !== undefined)
+				params.set("maxVolumen", String(filters.maxVolumen));
 
 			const response = await fetch(`/api/products?${params.toString()}`);
 
@@ -34,5 +52,6 @@ export const useProducts = ({ filters, page, size }: UseProductsParams) => {
 
 			return response.json();
 		},
+		placeholderData: (previousData) => previousData,
 	});
 };
