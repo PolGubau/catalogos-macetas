@@ -24,6 +24,7 @@ export const CatalogFilters = ({
   // Local state for search input to enable debouncing
   const [searchInput, setSearchInput] = useState(filters.search || '');
   const debouncedSearch = useDebounce(searchInput, 500);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
   // State for showing/hiding advanced filters
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
