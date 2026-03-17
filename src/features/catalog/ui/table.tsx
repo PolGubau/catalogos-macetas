@@ -86,6 +86,16 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
       maxPrice: searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined,
       categoria: searchParams.get('categoria') || undefined,
       empresa: searchParams.get('empresa') || undefined,
+      color: searchParams.get('color') || undefined,
+      origenPdf: searchParams.get('origenPdf') || undefined,
+      minAncho: searchParams.get('minAncho') ? Number(searchParams.get('minAncho')) : undefined,
+      maxAncho: searchParams.get('maxAncho') ? Number(searchParams.get('maxAncho')) : undefined,
+      minLargo: searchParams.get('minLargo') ? Number(searchParams.get('minLargo')) : undefined,
+      maxLargo: searchParams.get('maxLargo') ? Number(searchParams.get('maxLargo')) : undefined,
+      minPeso: searchParams.get('minPeso') ? Number(searchParams.get('minPeso')) : undefined,
+      maxPeso: searchParams.get('maxPeso') ? Number(searchParams.get('maxPeso')) : undefined,
+      minVolumen: searchParams.get('minVolumen') ? Number(searchParams.get('minVolumen')) : undefined,
+      maxVolumen: searchParams.get('maxVolumen') ? Number(searchParams.get('maxVolumen')) : undefined,
     };
   }, [searchParams]);
 
@@ -98,6 +108,16 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
     if (newFilters.maxPrice !== undefined) params.set('maxPrice', String(newFilters.maxPrice));
     if (newFilters.categoria) params.set('categoria', newFilters.categoria);
     if (newFilters.empresa) params.set('empresa', newFilters.empresa);
+    if (newFilters.color) params.set('color', newFilters.color);
+    if (newFilters.origenPdf) params.set('origenPdf', newFilters.origenPdf);
+    if (newFilters.minAncho !== undefined) params.set('minAncho', String(newFilters.minAncho));
+    if (newFilters.maxAncho !== undefined) params.set('maxAncho', String(newFilters.maxAncho));
+    if (newFilters.minLargo !== undefined) params.set('minLargo', String(newFilters.minLargo));
+    if (newFilters.maxLargo !== undefined) params.set('maxLargo', String(newFilters.maxLargo));
+    if (newFilters.minPeso !== undefined) params.set('minPeso', String(newFilters.minPeso));
+    if (newFilters.maxPeso !== undefined) params.set('maxPeso', String(newFilters.maxPeso));
+    if (newFilters.minVolumen !== undefined) params.set('minVolumen', String(newFilters.minVolumen));
+    if (newFilters.maxVolumen !== undefined) params.set('maxVolumen', String(newFilters.maxVolumen));
 
     // Reset to page 0 when filters change
     params.set('page', '0');
