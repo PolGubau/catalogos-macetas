@@ -44,7 +44,13 @@ export const useProducts = ({ filters, page, size }: UseProductsParams) => {
 			if (filters.maxVolumen !== undefined)
 				params.set("maxVolumen", String(filters.maxVolumen));
 
-			const response = await fetch(`/api/products?${params.toString()}`);
+			// Use API base URL from env in production, proxy in development
+			const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
+			const apiUrl = apiBaseUrl
+				? `${apiBaseUrl}/api/products?${params.toString()}`
+				: `/api/products?${params.toString()}`;
+
+			const response = await fetch(apiUrl);
 
 			if (!response.ok) {
 				throw new Error("Error al cargar los productos");
