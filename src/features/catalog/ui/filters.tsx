@@ -29,6 +29,7 @@ export const CatalogFilters = ({
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
   // Sync local state with external filter changes (e.g., when clearing filters)
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (filters.search !== searchInput && filters.search !== debouncedSearch) {
       setSearchInput(filters.search || '');
@@ -36,6 +37,7 @@ export const CatalogFilters = ({
   }, [filters.search]);
 
   // Update filters when debounced search changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (debouncedSearch !== filters.search) {
       onFiltersChange({ ...filters, search: debouncedSearch || undefined });
@@ -219,7 +221,8 @@ export const CatalogFilters = ({
             onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
             className="w-full px-3 py-2 text-sm font-semibold rounded-lg border-2 border-primary/20 bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-200 flex items-center justify-center gap-2"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <title>{showAdvancedFilters ? 'Menos filtros' : 'Más filtros'}</title>
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={showAdvancedFilters ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"} />
             </svg>
             {showAdvancedFilters ? 'Menos filtros' : 'Más filtros'}

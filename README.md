@@ -60,9 +60,22 @@ VITE_API_BASE_URL=https://alex-back-l4uhvp-a22dbf-185-250-36-170.traefik.me
 ```
 
 **Para cambiar la URL del backend:**
-1. **Desarrollo**: Deja `VITE_API_BASE_URL` vacío en `.env` (usa el proxy de Vite configurado en `vite.config.ts`)
-2. **Producción**: Edita `VITE_API_BASE_URL` en `.env.production` con la URL completa del backend
-3. Reinicia el servidor (`pnpm dev`) o reconstruye (`pnpm build`) según corresponda
+
+1. **Desarrollo local**:
+   - Deja `VITE_API_BASE_URL` vacío en `.env` (usa el proxy de Vite)
+   - Reinicia el servidor: `pnpm dev`
+
+2. **Producción (Vercel)**:
+   - Opción A: Edita `VITE_API_BASE_URL` en `vercel.json`
+   - Opción B: Configura la variable de entorno en el dashboard de Vercel:
+     - Ve a tu proyecto en Vercel
+     - Settings → Environment Variables
+     - Añade: `VITE_API_BASE_URL` = `https://alex-back-l4uhvp-a22dbf-185-250-36-170.traefik.me`
+   - Redeploy el proyecto
+
+3. **Build local para producción**:
+   - Edita `VITE_API_BASE_URL` en `.env.production`
+   - Ejecuta: `pnpm build`
 
 ## 📚 Tecnologías
 
@@ -75,6 +88,7 @@ VITE_API_BASE_URL=https://alex-back-l4uhvp-a22dbf-185-250-36-170.traefik.me
 
 ## 📖 Documentación
 
+- [`VERCEL_DEPLOYMENT.md`](./VERCEL_DEPLOYMENT.md) - **Guía de deployment en Vercel**
 - [`BACKEND_SETUP.md`](./BACKEND_SETUP.md) - Configuración del backend y proxy
 - [Documentación original de Vite](#vite-template-info)
 
