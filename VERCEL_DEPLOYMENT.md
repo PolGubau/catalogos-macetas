@@ -2,26 +2,34 @@
 
 ## 🚀 Configuración Inicial
 
-### Opción 1: Usando vercel.json (Recomendado)
+### Solución de CORS con Vercel Rewrites
 
-El archivo `vercel.json` ya está configurado con la variable de entorno necesaria:
+El archivo `vercel.json` está configurado con **rewrites** para evitar problemas de CORS:
 
 ```json
 {
   "buildCommand": "pnpm build",
   "outputDirectory": "dist",
   "framework": "vite",
-  "env": {
-    "VITE_API_BASE_URL": "https://alex-back-l4uhvp-a22dbf-185-250-36-170.traefik.me"
-  }
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://alex-back-l4uhvp-a22dbf-185-250-36-170.traefik.me/api/:path*"
+    }
+  ]
 }
 ```
+
+**Cómo funciona:**
+- Las peticiones a `https://macetas.polgubau.com/api/products` se redirigen automáticamente a `https://alex-back-l4uhvp-a22dbf-185-250-36-170.traefik.me/api/products`
+- Vercel actúa como proxy, evitando problemas de CORS
+- El frontend siempre usa rutas relativas (`/api/...`)
 
 **Pasos:**
 1. Haz commit de `vercel.json`
 2. Push a tu repositorio
 3. Vercel detectará automáticamente la configuración
-4. El deploy se hará con la variable de entorno correcta
+4. El deploy se hará con el proxy configurado
 
 ### Opción 2: Configurar en el Dashboard de Vercel
 

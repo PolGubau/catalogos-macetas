@@ -1,9 +1,11 @@
 {
-  "buildCommand": "pnpm build",
-  "outputDirectory": "dist",
-  "framework": "vite",
-  "env": {
-    "VITE_API_BASE_URL": "https://alex-back-l4uhvp-a22dbf-185-250-36-170.traefik.me"
-  }
+	"buildCommand": "pnpm build",
+	"outputDirectory": "dist",
+	"framework": "vite",
+	"rewrites": [
+		{
+			"source": "/api/:path*",
+			"destination": "https://alex-back-l4uhvp-a22dbf-185-250-36-170.traefik.me/api/:path*"
+		}
+	]
 }
-

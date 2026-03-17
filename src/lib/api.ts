@@ -1,12 +1,12 @@
 /**
  * Get the API base URL
- * In development: returns empty string to use Vite proxy
- * In production: returns the full API URL from environment variable
+ * Always returns empty string to use proxy (Vite in dev, Vercel in production)
  */
 export function getApiBaseUrl(): string {
-  // In development, use the Vite proxy (empty string means relative URLs)
-  // In production, use the full API URL from environment variable
-  return import.meta.env.VITE_API_BASE_URL || "";
+	// Always use relative URLs - proxies handle the routing:
+	// - Development: Vite proxy (vite.config.ts)
+	// - Production: Vercel rewrites (vercel.json)
+	return "";
 }
 
 /**
@@ -15,10 +15,6 @@ export function getApiBaseUrl(): string {
  * @returns The full URL for the API endpoint
  */
 export function getApiUrl(path: string): string {
-  const baseUrl = getApiBaseUrl();
-  
-  // If baseUrl is empty (development), return the path as-is for proxy
-  // If baseUrl exists (production), prepend it to the path
-  return baseUrl ? `${baseUrl}${path}` : path;
+	// Always return the path as-is to use the proxy
+	return path;
 }
-
