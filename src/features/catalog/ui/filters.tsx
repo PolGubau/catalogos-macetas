@@ -152,11 +152,11 @@ export const CatalogFilters = ({
   };
 
   return (
-    <div className="rounded-xl border border-border bg-gradient-to-br from-card to-card/50 p-4 shadow-lg backdrop-blur-sm">
-      {/* Filtros Primarios - Siempre visibles */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
-        {/* Search Filter */}
-        <Field.Root className="flex flex-col gap-1.5">
+    <div className="rounded-xl border border-border bg-linear-to-br from-card to-card/50 p-6 shadow-lg backdrop-blur-sm">
+      {/* Filtros Primarios - Layout Horizontal */}
+      <header className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-4">
+        {/* Search Filter - Ocupa 2 columnas */}
+        <Field.Root className="flex flex-col gap-1.5 md:col-span-3">
           <Field.Label className="text-xs font-semibold text-foreground">
             Búsqueda
           </Field.Label>
@@ -228,13 +228,13 @@ export const CatalogFilters = ({
             {showAdvancedFilters ? 'Menos filtros' : 'Más filtros'}
           </button>
         </div>
-      </div>
+      </header>
 
       {/* Filtros Avanzados - Colapsables */}
       {showAdvancedFilters && (
-        <div className="space-y-3 pt-3 border-t border-border animate-in fade-in slide-in-from-top-4 duration-300">
-          {/* Precio */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="space-y-4 pt-4 border-t border-border animate-in fade-in slide-in-from-top-4 duration-300">
+          {/* Fila 1: Precio, Color, Origen PDF */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Field.Root className="flex flex-col gap-1.5">
               <Field.Label className="text-xs font-semibold text-foreground">
                 Precio mín (€)
@@ -268,10 +268,8 @@ export const CatalogFilters = ({
                 />
               </NumberField.Root>
             </Field.Root>
-          </div>
 
-          {/* Color y Origen PDF */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {/* Color */}
             <Field.Root className="flex flex-col gap-1.5">
               <Field.Label className="text-xs font-semibold text-foreground">
                 Color
@@ -290,6 +288,7 @@ export const CatalogFilters = ({
               </select>
             </Field.Root>
 
+            {/* Origen PDF */}
             <Field.Root className="flex flex-col gap-1.5">
               <Field.Label className="text-xs font-semibold text-foreground">
                 Origen PDF
@@ -309,14 +308,11 @@ export const CatalogFilters = ({
             </Field.Root>
           </div>
 
-          {/* Dimensiones - Ancho y Largo */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {/* Fila 2: Dimensiones (Ancho, Largo, Peso, Volumen) */}
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
             {/* Min Ancho */}
-            <Field.Root className="flex flex-col gap-2.5 animate-in fade-in slide-in-from-left-4 duration-500 delay-[450ms]">
-              <Field.Label className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                </svg>
+            <Field.Root className="flex flex-col gap-1.5">
+              <Field.Label className="text-xs font-semibold text-foreground">
                 Ancho mín (cm)
               </Field.Label>
               <NumberField.Root
@@ -325,27 +321,16 @@ export const CatalogFilters = ({
                 min={0}
                 step={0.1}
               >
-                <NumberField.Group className="flex gap-2">
-                  <NumberField.Decrement className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                    −
-                  </NumberField.Decrement>
-                  <NumberField.Input
-                    className="flex-1 px-4 py-2.5 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 hover:border-primary/50 text-center tabular-nums"
-                    placeholder="0.0"
-                  />
-                  <NumberField.Increment className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                    +
-                  </NumberField.Increment>
-                </NumberField.Group>
+                <NumberField.Input
+                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
+                  placeholder="0.0"
+                />
               </NumberField.Root>
             </Field.Root>
 
             {/* Max Ancho */}
-            <Field.Root className="flex flex-col gap-2.5 animate-in fade-in slide-in-from-left-4 duration-500 delay-[500ms]">
-              <Field.Label className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                </svg>
+            <Field.Root className="flex flex-col gap-1.5">
+              <Field.Label className="text-xs font-semibold text-foreground">
                 Ancho máx (cm)
               </Field.Label>
               <NumberField.Root
@@ -354,27 +339,16 @@ export const CatalogFilters = ({
                 min={0}
                 step={0.1}
               >
-                <NumberField.Group className="flex gap-2">
-                  <NumberField.Decrement className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                    −
-                  </NumberField.Decrement>
-                  <NumberField.Input
-                    className="flex-1 px-4 py-2.5 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 hover:border-primary/50 text-center tabular-nums"
-                    placeholder="0.0"
-                  />
-                  <NumberField.Increment className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                    +
-                  </NumberField.Increment>
-                </NumberField.Group>
+                <NumberField.Input
+                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
+                  placeholder="0.0"
+                />
               </NumberField.Root>
             </Field.Root>
 
             {/* Min Largo */}
-            <Field.Root className="flex flex-col gap-2.5 animate-in fade-in slide-in-from-left-4 duration-500 delay-[550ms]">
-              <Field.Label className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                </svg>
+            <Field.Root className="flex flex-col gap-1.5">
+              <Field.Label className="text-xs font-semibold text-foreground">
                 Largo mín (cm)
               </Field.Label>
               <NumberField.Root
@@ -383,27 +357,16 @@ export const CatalogFilters = ({
                 min={0}
                 step={0.1}
               >
-                <NumberField.Group className="flex gap-2">
-                  <NumberField.Decrement className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                    −
-                  </NumberField.Decrement>
-                  <NumberField.Input
-                    className="flex-1 px-4 py-2.5 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 hover:border-primary/50 text-center tabular-nums"
-                    placeholder="0.0"
-                  />
-                  <NumberField.Increment className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                    +
-                  </NumberField.Increment>
-                </NumberField.Group>
+                <NumberField.Input
+                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
+                  placeholder="0.0"
+                />
               </NumberField.Root>
             </Field.Root>
 
             {/* Max Largo */}
-            <Field.Root className="flex flex-col gap-2.5 animate-in fade-in slide-in-from-left-4 duration-500 delay-[600ms]">
-              <Field.Label className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                </svg>
+            <Field.Root className="flex flex-col gap-1.5">
+              <Field.Label className="text-xs font-semibold text-foreground">
                 Largo máx (cm)
               </Field.Label>
               <NumberField.Root
@@ -412,27 +375,16 @@ export const CatalogFilters = ({
                 min={0}
                 step={0.1}
               >
-                <NumberField.Group className="flex gap-2">
-                  <NumberField.Decrement className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                    −
-                  </NumberField.Decrement>
-                  <NumberField.Input
-                    className="flex-1 px-4 py-2.5 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 hover:border-primary/50 text-center tabular-nums"
-                    placeholder="0.0"
-                  />
-                  <NumberField.Increment className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                    +
-                  </NumberField.Increment>
-                </NumberField.Group>
+                <NumberField.Input
+                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
+                  placeholder="0.0"
+                />
               </NumberField.Root>
             </Field.Root>
 
             {/* Min Peso */}
-            <Field.Root className="flex flex-col gap-2.5 animate-in fade-in slide-in-from-left-4 duration-500 delay-[650ms]">
-              <Field.Label className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
-                </svg>
+            <Field.Root className="flex flex-col gap-1.5">
+              <Field.Label className="text-xs font-semibold text-foreground">
                 Peso mín (kg)
               </Field.Label>
               <NumberField.Root
@@ -441,27 +393,16 @@ export const CatalogFilters = ({
                 min={0}
                 step={0.01}
               >
-                <NumberField.Group className="flex gap-2">
-                  <NumberField.Decrement className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                    −
-                  </NumberField.Decrement>
-                  <NumberField.Input
-                    className="flex-1 px-4 py-2.5 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 hover:border-primary/50 text-center tabular-nums"
-                    placeholder="0.00"
-                  />
-                  <NumberField.Increment className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                    +
-                  </NumberField.Increment>
-                </NumberField.Group>
+                <NumberField.Input
+                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
+                  placeholder="0.00"
+                />
               </NumberField.Root>
             </Field.Root>
 
             {/* Max Peso */}
-            <Field.Root className="flex flex-col gap-2.5 animate-in fade-in slide-in-from-left-4 duration-500 delay-[700ms]">
-              <Field.Label className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
-                </svg>
+            <Field.Root className="flex flex-col gap-1.5">
+              <Field.Label className="text-xs font-semibold text-foreground">
                 Peso máx (kg)
               </Field.Label>
               <NumberField.Root
@@ -470,27 +411,16 @@ export const CatalogFilters = ({
                 min={0}
                 step={0.01}
               >
-                <NumberField.Group className="flex gap-2">
-                  <NumberField.Decrement className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                    −
-                  </NumberField.Decrement>
-                  <NumberField.Input
-                    className="flex-1 px-4 py-2.5 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 hover:border-primary/50 text-center tabular-nums"
-                    placeholder="0.00"
-                  />
-                  <NumberField.Increment className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                    +
-                  </NumberField.Increment>
-                </NumberField.Group>
+                <NumberField.Input
+                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
+                  placeholder="0.00"
+                />
               </NumberField.Root>
             </Field.Root>
 
             {/* Min Volumen */}
-            <Field.Root className="flex flex-col gap-2.5 animate-in fade-in slide-in-from-left-4 duration-500 delay-[750ms]">
-              <Field.Label className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                </svg>
+            <Field.Root className="flex flex-col gap-1.5">
+              <Field.Label className="text-xs font-semibold text-foreground">
                 Volumen mín (L)
               </Field.Label>
               <NumberField.Root
@@ -499,27 +429,16 @@ export const CatalogFilters = ({
                 min={0}
                 step={0.1}
               >
-                <NumberField.Group className="flex gap-2">
-                  <NumberField.Decrement className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                    −
-                  </NumberField.Decrement>
-                  <NumberField.Input
-                    className="flex-1 px-4 py-2.5 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 hover:border-primary/50 text-center tabular-nums"
-                    placeholder="0.0"
-                  />
-                  <NumberField.Increment className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                    +
-                  </NumberField.Increment>
-                </NumberField.Group>
+                <NumberField.Input
+                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
+                  placeholder="0.0"
+                />
               </NumberField.Root>
             </Field.Root>
 
             {/* Max Volumen */}
-            <Field.Root className="flex flex-col gap-2.5 animate-in fade-in slide-in-from-left-4 duration-500 delay-[800ms]">
-              <Field.Label className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                </svg>
+            <Field.Root className="flex flex-col gap-1.5">
+              <Field.Label className="text-xs font-semibold text-foreground">
                 Volumen máx (L)
               </Field.Label>
               <NumberField.Root
@@ -528,18 +447,10 @@ export const CatalogFilters = ({
                 min={0}
                 step={0.1}
               >
-                <NumberField.Group className="flex gap-2">
-                  <NumberField.Decrement className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                    −
-                  </NumberField.Decrement>
-                  <NumberField.Input
-                    className="flex-1 px-4 py-2.5 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 hover:border-primary/50 text-center tabular-nums"
-                    placeholder="0.0"
-                  />
-                  <NumberField.Increment className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                    +
-                  </NumberField.Increment>
-                </NumberField.Group>
+                <NumberField.Input
+                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
+                  placeholder="0.0"
+                />
               </NumberField.Root>
             </Field.Root>
           </div>
