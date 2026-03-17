@@ -209,108 +209,105 @@ export const CatalogFilters = ({
           </select>
         </Field.Root>
 
-        {/* Min Price Filter */}
-        <Field.Root className="flex flex-col gap-2.5 animate-in fade-in slide-in-from-left-4 duration-500 delay-200">
-          <Field.Label className="text-sm font-semibold text-foreground flex items-center gap-2">
-            <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Precio mínimo
-          </Field.Label>
-          <NumberField.Root
-            value={filters.minPrice ?? null}
-            onValueChange={handleMinPriceChange}
-            min={0}
-            step={0.01}
+        {/* Botón para mostrar filtros avanzados */}
+        <div className="flex items-end">
+          <button
+            type="button"
+            onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+            className="w-full px-3 py-2 text-sm font-semibold rounded-lg border-2 border-primary/20 bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-200 flex items-center justify-center gap-2"
           >
-            <NumberField.Group className="flex gap-2">
-              <NumberField.Decrement className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                −
-              </NumberField.Decrement>
-              <NumberField.Input
-                className="flex-1 px-4 py-2.5 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 hover:border-primary/50 text-center tabular-nums"
-                placeholder="0.00"
-              />
-              <NumberField.Increment className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                +
-              </NumberField.Increment>
-            </NumberField.Group>
-          </NumberField.Root>
-        </Field.Root>
-
-        {/* Max Price Filter */}
-        <Field.Root className="flex flex-col gap-2.5 animate-in fade-in slide-in-from-left-4 duration-500 delay-300">
-          <Field.Label className="text-sm font-semibold text-foreground flex items-center gap-2">
-            <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={showAdvancedFilters ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"} />
             </svg>
-            Precio máximo
-          </Field.Label>
-          <NumberField.Root
-            value={filters.maxPrice ?? null}
-            onValueChange={handleMaxPriceChange}
-            min={0}
-            step={0.01}
-          >
-            <NumberField.Group className="flex gap-2">
-              <NumberField.Decrement className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                −
-              </NumberField.Decrement>
-              <NumberField.Input
-                className="flex-1 px-4 py-2.5 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 hover:border-primary/50 text-center tabular-nums"
-                placeholder="0.00"
-              />
-              <NumberField.Increment className="px-3 py-2.5 text-sm font-bold rounded-lg border-2 border-input bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/10">
-                +
-              </NumberField.Increment>
-            </NumberField.Group>
-          </NumberField.Root>
-        </Field.Root>
-
-        {/* Color Filter */}
-        <Field.Root className="flex flex-col gap-2.5 animate-in fade-in slide-in-from-left-4 duration-500 delay-[350ms]">
-          <Field.Label className="text-sm font-semibold text-foreground flex items-center gap-2">
-            <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-            </svg>
-            Color
-          </Field.Label>
-          <select
-            value={filters.color || ''}
-            onChange={handleColorChange}
-            className="px-4 py-2.5 text-sm rounded-lg border-2 border-input bg-background text-foreground cursor-pointer focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 hover:border-primary/50 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em] bg-[right_0.5rem_center] bg-no-repeat pr-10"
-          >
-            <option value="">Todos los colores</option>
-            {colores.map((color) => (
-              <option key={color} value={color}>
-                {color}
-              </option>
-            ))}
-          </select>
-        </Field.Root>
-
-        {/* Origen PDF Filter */}
-        <Field.Root className="flex flex-col gap-2.5 animate-in fade-in slide-in-from-left-4 duration-500 delay-[400ms]">
-          <Field.Label className="text-sm font-semibold text-foreground flex items-center gap-2">
-            <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-            </svg>
-            Origen PDF
-          </Field.Label>
-          <select
-            value={filters.origenPdf || ''}
-            onChange={handleOrigenPdfChange}
-            className="px-4 py-2.5 text-sm rounded-lg border-2 border-input bg-background text-foreground cursor-pointer focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 hover:border-primary/50 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em] bg-[right_0.5rem_center] bg-no-repeat pr-10"
-          >
-            <option value="">Todos los orígenes</option>
-            {origenesPdf.map((origen) => (
-              <option key={origen} value={origen}>
-                {origen}
-              </option>
-            ))}
-          </select>
-        </Field.Root>
+            {showAdvancedFilters ? 'Menos filtros' : 'Más filtros'}
+          </button>
+        </div>
       </div>
+
+      {/* Filtros Avanzados - Colapsables */}
+      {showAdvancedFilters && (
+        <div className="space-y-3 pt-3 border-t border-border animate-in fade-in slide-in-from-top-4 duration-300">
+          {/* Precio */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <Field.Root className="flex flex-col gap-1.5">
+              <Field.Label className="text-xs font-semibold text-foreground">
+                Precio mín (€)
+              </Field.Label>
+              <NumberField.Root
+                value={filters.minPrice ?? null}
+                onValueChange={handleMinPriceChange}
+                min={0}
+                step={0.01}
+              >
+                <NumberField.Input
+                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
+                  placeholder="0.00"
+                />
+              </NumberField.Root>
+            </Field.Root>
+
+            <Field.Root className="flex flex-col gap-1.5">
+              <Field.Label className="text-xs font-semibold text-foreground">
+                Precio máx (€)
+              </Field.Label>
+              <NumberField.Root
+                value={filters.maxPrice ?? null}
+                onValueChange={handleMaxPriceChange}
+                min={0}
+                step={0.01}
+              >
+                <NumberField.Input
+                  className="w-full px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 text-center tabular-nums"
+                  placeholder="0.00"
+                />
+              </NumberField.Root>
+            </Field.Root>
+          </div>
+
+          {/* Color Filter */}
+          <Field.Root className="flex flex-col gap-2.5 animate-in fade-in slide-in-from-left-4 duration-500 delay-[350ms]">
+            <Field.Label className="text-sm font-semibold text-foreground flex items-center gap-2">
+              <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+              </svg>
+              Color
+            </Field.Label>
+            <select
+              value={filters.color || ''}
+              onChange={handleColorChange}
+              className="px-4 py-2.5 text-sm rounded-lg border-2 border-input bg-background text-foreground cursor-pointer focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 hover:border-primary/50 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em] bg-[right_0.5rem_center] bg-no-repeat pr-10"
+            >
+              <option value="">Todos los colores</option>
+              {colores.map((color) => (
+                <option key={color} value={color}>
+                  {color}
+                </option>
+              ))}
+            </select>
+          </Field.Root>
+
+          {/* Origen PDF Filter */}
+          <Field.Root className="flex flex-col gap-2.5 animate-in fade-in slide-in-from-left-4 duration-500 delay-[400ms]">
+            <Field.Label className="text-sm font-semibold text-foreground flex items-center gap-2">
+              <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+              Origen PDF
+            </Field.Label>
+            <select
+              value={filters.origenPdf || ''}
+              onChange={handleOrigenPdfChange}
+              className="px-4 py-2.5 text-sm rounded-lg border-2 border-input bg-background text-foreground cursor-pointer focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 hover:border-primary/50 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em] bg-[right_0.5rem_center] bg-no-repeat pr-10"
+            >
+              <option value="">Todos los orígenes</option>
+              {origenesPdf.map((origen) => (
+                <option key={origen} value={origen}>
+                  {origen}
+                </option>
+              ))}
+            </select>
+          </Field.Root>
+        </div>
 
       {/* Dimensiones y Medidas - Segunda fila */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
