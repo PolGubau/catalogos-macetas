@@ -6,8 +6,10 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Download, FileDown, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
+import { ThemeToggle } from '../../../components/ThemeToggle';
 import { getApiUrl } from '../../../lib/api';
 import type { Pagination, Product, ProductFilters } from '../domains/catalog';
 import { useFilterOptions } from '../hooks/useFilterOptions';
@@ -188,7 +190,15 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
       {
         accessorKey: 'precio',
         header: 'Precio',
-        cell: (info) => `€${Number(info.getValue()).toFixed(2)}`,
+        cell: (info) => {
+          const formattedPrice = new Intl.NumberFormat('es-ES', {
+            style: 'currency',
+            currency: 'EUR',
+          }).format(Number(info.getValue()));
+          return (
+            <span className="text-sm text-foreground font-semibold">{formattedPrice}</span>
+          )
+        },
       },
       {
         accessorKey: 'color',
@@ -266,9 +276,7 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
                 className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-lg border-2 border-primary/20 bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/20"
                 aria-label="Exportar datos filtrados a CSV"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
+                <FileDown className="w-4 h-4" />
                 {isExporting ? 'Exportando...' : 'Exportar filtrados'}
               </button>
 
@@ -279,9 +287,7 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
                 className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg shadow-primary/25 focus:outline-none focus:ring-4 focus:ring-primary/20"
                 aria-label="Exportar todos los datos a CSV"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
+                <Download className="w-4 h-4" />
                 {isExporting ? 'Exportando...' : 'Exportar todo'}
               </button>
             </div>
@@ -297,6 +303,9 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
                 </span>
               </div>
             </div>
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
           </div>
         </div>
         {pagination.numberOfElements > 0 && (
@@ -410,20 +419,7 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
             <div className="py-16 text-center animate-in fade-in zoom-in-95 duration-500">
               <div className="flex flex-col items-center gap-4 max-w-md mx-auto">
                 <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center">
-                  <svg
-                    className="w-8 h-8 text-muted-foreground"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                  </svg>
+                  <Search className="w-8 h-8 text-muted-foreground" />
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-lg font-semibold text-foreground">No se encontraron productos</h3>
@@ -472,9 +468,7 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
             className="p-2 text-sm font-medium rounded-md border border-border bg-background hover:bg-accent hover:text-accent-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             aria-label="Ir a la primera página"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-            </svg>
+            <ChevronsLeft className="w-4 h-4" />
           </button>
           <button
             type="button"
@@ -483,9 +477,7 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
             className="p-2 text-sm font-medium rounded-md border border-border bg-background hover:bg-accent hover:text-accent-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             aria-label="Ir a la página anterior"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
+            <ChevronLeft className="w-4 h-4" />
           </button>
 
           <span className="px-4 py-2 text-sm font-medium text-foreground bg-primary/10 border border-primary/20 rounded-md tabular-nums">
@@ -502,9 +494,7 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
             className="p-2 text-sm font-medium rounded-md border border-border bg-background hover:bg-accent hover:text-accent-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             aria-label="Ir a la página siguiente"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+            <ChevronRight className="w-4 h-4" />
           </button>
           <button
             type="button"
@@ -513,9 +503,7 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
             className="p-2 text-sm font-medium rounded-md border border-border bg-background hover:bg-accent hover:text-accent-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             aria-label="Ir a la última página"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-            </svg>
+            <ChevronsRight className="w-4 h-4" />
           </button>
         </div>
       </nav>

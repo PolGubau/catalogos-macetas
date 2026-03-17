@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
 	--color-background: oklch(100% 0 0);
 	--color-foreground: oklch(9.84% 0.002 285.82);
@@ -33,7 +35,7 @@
 	--radius: 0.5rem;
 }
 
-@media (prefers-color-scheme: dark) {
+.dark {
 	@theme {
 		--color-background: oklch(13.14% 0.008 285.82);
 		--color-foreground: oklch(98.04% 0.002 285.82);
