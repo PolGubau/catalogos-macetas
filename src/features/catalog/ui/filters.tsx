@@ -25,6 +25,9 @@ export const CatalogFilters = ({
   const [searchInput, setSearchInput] = useState(filters.search || '');
   const debouncedSearch = useDebounce(searchInput, 500);
 
+  // State for showing/hiding advanced filters
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+
   // Sync local state with external filter changes (e.g., when clearing filters)
   useEffect(() => {
     if (filters.search !== searchInput && filters.search !== debouncedSearch) {

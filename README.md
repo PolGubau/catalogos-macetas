@@ -38,20 +38,31 @@ La aplicación está conectada a:
 https://alex-back-l4uhvp-a22dbf-185-250-36-170.traefik.me
 ```
 
-### Proxy de Vite
+### Configuración de Entornos
 
-El proyecto usa un proxy que redirige `/api` al backend configurado.
+La aplicación maneja automáticamente las URLs de la API según el entorno:
 
-**Para cambiar la URL del backend:**
-1. Edita `VITE_API_BASE_URL` en `.env`
-2. Reinicia el servidor de Vite (Ctrl+C y `pnpm dev`)
+- **Desarrollo (`pnpm dev`)**: Usa el proxy de Vite configurado en `vite.config.ts`
+- **Producción (`pnpm build`)**: Usa la URL completa del backend desde `VITE_API_BASE_URL`
 
 ### Variables de Entorno
 
+**`.env` (desarrollo):**
 ```bash
-# URL del backend
+# Dejar vacío para usar el proxy de Vite en desarrollo
+VITE_API_BASE_URL=
+```
+
+**`.env.production` (producción):**
+```bash
+# URL completa del backend para producción
 VITE_API_BASE_URL=https://alex-back-l4uhvp-a22dbf-185-250-36-170.traefik.me
 ```
+
+**Para cambiar la URL del backend:**
+1. **Desarrollo**: Deja `VITE_API_BASE_URL` vacío en `.env` (usa el proxy de Vite configurado en `vite.config.ts`)
+2. **Producción**: Edita `VITE_API_BASE_URL` en `.env.production` con la URL completa del backend
+3. Reinicia el servidor (`pnpm dev`) o reconstruye (`pnpm build`) según corresponda
 
 ## 📚 Tecnologías
 

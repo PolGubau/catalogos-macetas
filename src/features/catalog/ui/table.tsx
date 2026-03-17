@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
+import { getApiUrl } from '../../../lib/api';
 import type { Pagination, Product, ProductFilters } from '../domains/catalog';
 import { useFilterOptions } from '../hooks/useFilterOptions';
 import { CatalogFilters } from './filters';
@@ -145,11 +146,8 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
   const handleExportAll = async () => {
     setIsExporting(true);
     try {
-      // Use API base URL from env in production, proxy in development
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
-      const apiUrl = apiBaseUrl
-        ? `${apiBaseUrl}/api/products?size=10000`
-        : '/api/products?size=10000';
+      // Build API URL (uses proxy in dev, full URL in production)
+      const apiUrl = getApiUrl('/api/products?size=10000');
 
       // Fetch all products without filters
       const response = await fetch(apiUrl);

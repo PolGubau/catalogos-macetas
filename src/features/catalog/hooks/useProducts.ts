@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { getApiUrl } from "../../../lib/api";
 import type { ProductFilters, ProductsResponse } from "../domains/catalog";
 
 interface UseProductsParams {
@@ -44,11 +45,8 @@ export const useProducts = ({ filters, page, size }: UseProductsParams) => {
 			if (filters.maxVolumen !== undefined)
 				params.set("maxVolumen", String(filters.maxVolumen));
 
-			// Use API base URL from env in production, proxy in development
-			const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
-			const apiUrl = apiBaseUrl
-				? `${apiBaseUrl}/api/products?${params.toString()}`
-				: `/api/products?${params.toString()}`;
+			// Build API URL (uses proxy in dev, full URL in production)
+			const apiUrl = getApiUrl(`/api/products?${params.toString()}`);
 
 			const response = await fetch(apiUrl);
 
