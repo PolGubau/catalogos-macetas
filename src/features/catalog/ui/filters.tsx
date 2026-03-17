@@ -184,7 +184,7 @@ export const CatalogFilters = ({
           <select
             value={filters.categoria || ''}
             onChange={handleCategoryChange}
-            className="px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground cursor-pointer focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em] bg-[right_0.5rem_center] bg-no-repeat pr-8"
+            className="px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground cursor-pointer focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill=%22none%22%20viewBox=%220%200%2020%2020%22%3E%3Cpath%20stroke=%22%236b7280%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-width=%221.5%22%20d=%22M6%208l4%204%204-4%22/%3E%3C/svg%3E')] bg-size-[1.5em] bg-position-[right_0.5rem_center] bg-no-repeat pr-8"
           >
             <option value="">Todas</option>
             {categories.map((cat) => (
@@ -203,7 +203,7 @@ export const CatalogFilters = ({
           <select
             value={filters.empresa || ''}
             onChange={handleEmpresaChange}
-            className="px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground cursor-pointer focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em] bg-[right_0.5rem_center] bg-no-repeat pr-8"
+            className="px-3 py-2 text-sm rounded-lg border-2 border-input bg-background text-foreground cursor-pointer focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em] bg-position-[right_0.5rem_center] bg-no-repeat pr-8"
           >
             <option value="">Todas</option>
             {empresas.map((emp) => (
@@ -215,19 +215,17 @@ export const CatalogFilters = ({
         </Field.Root>
 
         {/* Botón para mostrar filtros avanzados */}
-        <div className="flex items-end">
-          <button
-            type="button"
-            onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-            className="w-full px-3 py-2 text-sm font-semibold rounded-lg border-2 border-primary/20 bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-200 flex items-center justify-center gap-2"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <title>{showAdvancedFilters ? 'Menos filtros' : 'Más filtros'}</title>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={showAdvancedFilters ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"} />
-            </svg>
-            {showAdvancedFilters ? 'Menos filtros' : 'Más filtros'}
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+          className="w-full px-3 py-2 text-sm font-semibold rounded-lg border-2 border-primary/20 bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-200 flex items-center justify-center gap-2"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <title>{showAdvancedFilters ? 'Menos filtros' : 'Más filtros'}</title>
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={showAdvancedFilters ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"} />
+          </svg>
+          {showAdvancedFilters ? 'Menos filtros' : 'Más filtros'}
+        </button>
       </header>
 
       {/* Filtros Avanzados - Colapsables */}
@@ -458,8 +456,7 @@ export const CatalogFilters = ({
         </div>
       )}
 
-      {/* Footer con contador y botón limpiar */}
-      <div className="flex items-center justify-between pt-3 border-t border-border">
+      <footer className="flex items-center justify-between pt-3 border-t border-border">
         <p className="text-xs text-muted-foreground">
           {Object.values(filters).filter(Boolean).length > 0
             ? `${Object.values(filters).filter(Boolean).length} filtro(s) activo(s)`
@@ -475,7 +472,7 @@ export const CatalogFilters = ({
           </svg>
           Limpiar
         </button>
-      </div>
+      </footer>
     </div>
   );
 };

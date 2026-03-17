@@ -13,57 +13,15 @@ import type { Pagination, Product, ProductFilters } from '../domains/catalog';
 import { useFilterOptions } from '../hooks/useFilterOptions';
 import { CatalogFilters } from './filters';
 
-// Helper function to convert products to CSV
-const convertToCSV = (products: Product[]): string => {
-  if (products.length === 0) return '';
-
-  // Define headers
-  const headers = [
-    'ID',
-    'Referencia',
-    'Nombre',
-    'Descripción',
-    'Categoría',
-    'Empresa',
-    'Precio'
-  ];
-
-  // Create CSV rows
-  const rows = products.map(product => [
-    product.id,
-    product.referencia,
-    product.nombre,
-    product.descripcion || '',
-    product.categoria,
-    product.empresa,
-    product.precio
-  ]);
-
-  // Combine headers and rows
-  const csvContent = [
-    headers.join(','),
-    ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
-  ].join('\n');
-
-  return csvContent;
-};
-
-// Helper function to download CSV
-const downloadCSV = (csvContent: string, filename: string) => {
-  // biome-ignore lint/style/useTemplate: <explanation>
-  const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+// Helper function to download file from URL
+const downloadFile = (url: string, filename: string) => {
   const link = document.createElement('a');
-  const url = URL.createObjectURL(blob);
-
   link.setAttribute('href', url);
   link.setAttribute('download', filename);
   link.style.visibility = 'hidden';
-
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-
-  URL.revokeObjectURL(url);
 };
 
 interface CatalogTableProps {
@@ -127,13 +85,33 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
   };
 
   // Export filtered data (current view)
-  const handleExportFiltered = () => {
+  const handleExportFiltered = async () => {
     setIsExporting(true);
     try {
-      const csv = convertToCSV(data);
+      // Build query params with current filters
+      const params = new URLSearchParams();
+      if (filters.search) params.set('search', filters.search);
+      if (filters.minPrice !== undefined) params.set('minPrice', String(filters.minPrice));
+      if (filters.maxPrice !== undefined) params.set('maxPrice', String(filters.maxPrice));
+      if (filters.categoria) params.set('categoria', filters.categoria);
+      if (filters.empresa) params.set('empresa', filters.empresa);
+      if (filters.color) params.set('color', filters.color);
+      if (filters.origenPdf) params.set('origenPdf', filters.origenPdf);
+      if (filters.minAncho !== undefined) params.set('minAncho', String(filters.minAncho));
+      if (filters.maxAncho !== undefined) params.set('maxAncho', String(filters.maxAncho));
+      if (filters.minLargo !== undefined) params.set('minLargo', String(filters.minLargo));
+      if (filters.maxLargo !== undefined) params.set('maxLargo', String(filters.maxLargo));
+      if (filters.minPeso !== undefined) params.set('minPeso', String(filters.minPeso));
+      if (filters.maxPeso !== undefined) params.set('maxPeso', String(filters.maxPeso));
+      if (filters.minVolumen !== undefined) params.set('minVolumen', String(filters.minVolumen));
+      if (filters.maxVolumen !== undefined) params.set('maxVolumen', String(filters.maxVolumen));
+
+      // Use backend export endpoint
+      const apiUrl = getApiUrl(`/api/products/export?format=csv&${params.toString()}`);
+
       const timestamp = new Date().toISOString().split('T')[0];
       const filterInfo = Object.values(filters).filter(Boolean).length > 0 ? '_filtrado' : '';
-      downloadCSV(csv, `catalogo_macetas${filterInfo}_${timestamp}.csv`);
+      downloadFile(apiUrl, `catalogo_macetas${filterInfo}_${timestamp}.csv`);
     } catch (error) {
       console.error('Error al exportar:', error);
       alert('Error al exportar los datos. Por favor, inténtalo de nuevo.');
@@ -146,22 +124,11 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
   const handleExportAll = async () => {
     setIsExporting(true);
     try {
-      // Build API URL (uses proxy in dev, full URL in production)
-      const apiUrl = getApiUrl('/api/products?size=10000');
+      // Use backend export endpoint without filters
+      const apiUrl = getApiUrl('/api/products/export?format=csv');
 
-      // Fetch all products without filters
-      const response = await fetch(apiUrl);
-
-      if (!response.ok) {
-        throw new Error('Error al obtener todos los productos');
-      }
-
-      const result = await response.json();
-      const allProducts = result.content || [];
-
-      const csv = convertToCSV(allProducts);
       const timestamp = new Date().toISOString().split('T')[0];
-      downloadCSV(csv, `catalogo_macetas_completo_${timestamp}.csv`);
+      downloadFile(apiUrl, `catalogo_macetas_completo_${timestamp}.csv`);
     } catch (error) {
       console.error('Error al exportar todos los datos:', error);
       alert('Error al exportar todos los datos. Por favor, inténtalo de nuevo.');
