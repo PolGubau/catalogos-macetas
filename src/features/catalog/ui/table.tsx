@@ -145,8 +145,14 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
   const handleExportAll = async () => {
     setIsExporting(true);
     try {
+      // Use API base URL from env in production, proxy in development
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
+      const apiUrl = apiBaseUrl
+        ? `${apiBaseUrl}/api/products?size=10000`
+        : '/api/products?size=10000';
+
       // Fetch all products without filters
-      const response = await fetch('/api/products?size=10000');
+      const response = await fetch(apiUrl);
 
       if (!response.ok) {
         throw new Error('Error al obtener todos los productos');
@@ -273,9 +279,9 @@ export const CatalogTable = ({ data, pagination, onPageChange, onPageSizeChange,
   });
 
   return (
-    <div className="w-full space-y-8 animate-in fade-in duration-500">
+    <div className="w-full space-y-4 animate-in fade-in duration-500">
       {/* Header with improved hierarchy */}
-      <header className="max-w-7xl mx-auto space-y-3 animate-in slide-in-from-top-4 duration-700">
+      <header className="max-w-7xl mx-auto space-y-2 animate-in slide-in-from-top-4 duration-700">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="space-y-1">
             <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
